@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Meteor } from 'meteor/meteor';
 
 export default class Login extends Component {
@@ -19,10 +19,12 @@ export default class Login extends Component {
     Meteor.loginWithPassword({ email }, password, error => {
       if (error) {
         this.setState({
-          error
+          error: 'invalid email or password.'
         });
       } else {
-        console.log('login successful!');
+        this.setState({
+          error: ''
+        });
       }
     });
   }
@@ -30,8 +32,8 @@ export default class Login extends Component {
   render() {
     return (
       <div>
-        {this.state.error ? <p> {this.state.error}</p> : undefined}
-        <form onSubmit={this.handleSubmit.bind(this)}>
+        <p className="error"> {this.state.error ? this.state.error : ''} </p>
+        <form onSubmit={this.handleSubmit.bind(this)} noValidate>
           <div>
             <input type="email" name="email" ref="email" placeholder="Your Email Address" />
           </div>
@@ -42,7 +44,7 @@ export default class Login extends Component {
           <button type="submit"> Login </button>
         </form>
 
-        <Link to="/singup"> Create an account? </Link>
+        <Link to="/signup"> Create an account? </Link>
       </div>
     );
   }
