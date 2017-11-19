@@ -8,10 +8,16 @@ import { Links } from '../imports/api/links';
 Tracker.autorun(() => {
   const isAuthenticated = !!Meteor.userId();
   onAuthChange(isAuthenticated);
-  const links = Links.find({}).fetch();
-  console.log('newlinks', links);
+  Meteor.subscribe('links');
 });
 
 Meteor.startup(() => {
+  Meteor.call('add', 3, 5, (err, res) => {
+    if (err) {
+      console.log(err.reason);
+    } else {
+      console.log(res);
+    }
+  });
   ReactDOM.render(routes, document.getElementById('app'));
 });
