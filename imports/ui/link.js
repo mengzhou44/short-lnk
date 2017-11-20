@@ -1,24 +1,29 @@
 import React, { Component } from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Acocunts } from 'meteor/accounts-base';
+
 import ReactDOM from 'react-dom';
 import { Tracker } from 'meteor/tracker';
 
 import { Links } from '../api/links';
+import PrivateHeader from './private-header';
+import AddLink from './add-link';
+import LinkListItem from './link-list-item';
 
 export default class Link extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      showVisible: true,
       links: []
     };
   }
 
   componentDidMount() {
     this.linksTracker = Tracker.autorun(() => {
+      Meteor.subscribe('links');
       this.setState({
-        links: Links.find({}).fetch()
+        links: Links.find({ visible: this.state.showVisible }).fetch()
       });
     });
   }
@@ -27,30 +32,32 @@ export default class Link extends Component {
     this.linksTracker.stop();
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
-    const url = this.refs.url.value.trim();
-    if (url) {
-      Links.insert({ url, userId: Meteor.userId() });
-      this.refs.url.value = '';
-    }
-  }
-
   renderLink(link) {
-    return <p key={link._id}>{link.url}</p>;
+    return <LinkListItem key={link._id} link={link} />;
   }
 
   render() {
+    console.log('this.state.links', this.state.links);
     return (
       <div>
-        <button onClick={() => Accounts.logout()}>Log out</button>
-        {this.state.links.map(this.renderLink)}
+        <PrivateHeader title="Links" />
+        <label>
+          <input
+            type="checkbox"
+            check={this.state.showVisible}
+            onChange={e => {
+              const showVisible = !this.state.showVisible;
+              this.setState({
+                showVisible,
+                links: Links.find({ visible: showVisible }).fetch()
+              });
+            }}
+          />
+          Show Hidden Links
+        </label>
+        <AddLink />
 
-        <p>Add Links </p>
-        <form onSubmit={this.handleSubmit.bind(this)} noValidate>
-          <input ref="url" type="text" placeholde="URL" />
-          <button type="submit">Add </button>
-        </form>
+        {this.state.links.map(this.renderLink)}
       </div>
     );
   }

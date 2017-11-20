@@ -1,8 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
+import { Link } from 'react-router';
 
-export default class NotFound extends Component {
-  render() {
-    return <div> Not Found component here </div>;
-  }
-}
+export default () => {
+  return (
+    <div className="box-view">
+      <div className="box-view__box">
+        <h1>Page Not Found </h1>
+        <p> We are not able to find this page </p>
+        <Link to="/" className="button button--link">
+          {' '}
+          Head Home{' '}
+        </Link>
+      </div>
+    </div>
+  );
+};

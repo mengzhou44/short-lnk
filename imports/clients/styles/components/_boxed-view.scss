@@ -1,0 +1,20 @@
+.box-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $box-view-overlay-bg;
+  width: 100vw;
+  height: 100vh;
+}
+
+.box-view__box {
+  background-color: $box-view-bg;
+  padding: 2.4rem;
+  text-align: center;
+  width: 24rem;
+}
+
+.box-view__form {
+  display: flex;
+  flex-direction: column;
+}

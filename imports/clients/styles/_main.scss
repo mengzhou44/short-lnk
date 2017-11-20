@@ -1,11 +1,4 @@
-body {
-  font-size: 62.5%;
-}
-
-.error {
-  padding: 10px;
-  font-size: 1.6rem;
-  color: red;
-}
-
-@import './components/signup';
+@import './variables';
+@import './base';
+@import './components/button';
+@import './components/boxed-view';
